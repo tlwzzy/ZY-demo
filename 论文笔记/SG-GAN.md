@@ -14,10 +14,8 @@
 
 #### 三元组生成网络
 为了生成三元组，本文提出了基于CNN,RNN,GAN的网络架构。网络由两部分组成，第一部分的结果会进入第二部分。首先是特征提取器：$f_{\Theta_{f}} : I \mapsto I^{\prime}$，使用全卷积网络将图片映射到相应的feature map.这一映射产生了L个特征，每个特征属于$R^D$，其中D对应于$f_{\Theta_{f}}$中的卷积核数。这些特征被送入循环组件$r_{\Theta_{r}} : I^{\prime} \mapsto \mathcal{V} \times \mathcal{V} \times \mathcal{V}$中。更具体地说，使用LSTM从三个时间步上输出词汇表中的词。给定视觉特征$\mathbf{X}_{t}^{\prime} \in I^{\prime}$，时间t的LSTM单元如下定义：  
-$$
-\begin{aligned} \vec{f}_{t} &=\sigma\left(W_{f} \mathbf{X}_{t}^{\prime}+U_{f} \vec{h}_{t-1}+b_{f}\right) \\ \vec{i}_{t} &=\sigma\left(W_{i} \mathbf{X}_{t}^{\prime}+U_{f} \vec{h}_{t-1}+b_{i}\right) \\ \vec{o}_{t} &=\sigma\left(W_{o} \mathbf{X}_{t}^{\prime}+U_{o} \vec{h}_{t-1}+b_{o}\right) \\ \vec{c}_{t} &=f_{t} \circ \vec{c}_{t-1}+\vec{i}_{t} \circ \tanh \left(W_{c} \mathbf{X}_{t}^{\prime}+U_{c} \vec{h}_{t-1}+b_{c}\right) \\ \vec{h}_{t} &=o_{t} \circ \tanh \left(\vec{c}_{t}\right) \end{aligned}
-$$
-中间详细过程：\#TODO  
+$$\begin{aligned} \vec{f}_{t} &=\sigma\left(W_{f} \mathbf{X}_{t}^{\prime}+U_{f} \vec{h}_{t-1}+b_{f}\right) \\ \vec{i}_{t} &=\sigma\left(W_{i} \mathbf{X}_{t}^{\prime}+U_{f} \vec{h}_{t-1}+b_{i}\right) \\ \vec{o}_{t} &=\sigma\left(W_{o} \mathbf{X}_{t}^{\prime}+U_{o} \vec{h}_{t-1}+b_{o}\right) \\ \vec{c}_{t} &=f_{t} \circ \vec{c}_{t-1}+\vec{i}_{t} \circ \tanh \left(W_{c} \mathbf{X}_{t}^{\prime}+U_{c} \vec{h}_{t-1}+b_{c}\right) \\ \vec{h}_{t} &=o_{t} \circ \tanh \left(\vec{c}_{t}\right) \end{aligned}
+$$中间详细过程：\#TODO  
 LSTM三步循环生成三元组。注意如上所定义的，循环分量的唯一输入时卷积分量的输出。因此，每个输入图像仅生成一个三元组。因为场景中包含很多具有不同关系和属性的不同对象，故希望生成器能在给定图像的情况下对三元组的分布进行建模。**近期使用GAN生成结构化数据方面取得了成功**，本文使用了对抗策略来训练生成器。
 
 #### 三元组生成网络的对抗网络
